@@ -8,12 +8,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequestMapping("/faqs")
@@ -24,11 +25,6 @@ public class FAQController {
   @Autowired
   public FAQController(FAQService service) {
     this.service = service;
-  }
-
-  @PostMapping
-  public ResponseEntity<FAQ> create(@RequestBody FAQ faq) {
-    return ResponseEntity.ok(service.save(faq));
   }
 
   @GetMapping
@@ -45,4 +41,22 @@ public class FAQController {
   public ResponseEntity<Optional<FAQ>> getFAQById(@PathVariable Long id) {
     return ResponseEntity.ok(service.findById(id));
   }
+
+  @PutMapping("/{id}")
+  public ResponseEntity<FAQ> updateFAQ(@PathVariable Long id, @RequestBody FAQ faq) {
+    return ResponseEntity.ok(service.updateFAQ(id, faq));
+  }
+
+  @PostMapping
+  public ResponseEntity<FAQ> create(@RequestBody FAQ faq) {
+    return ResponseEntity.ok(service.save(faq));
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Void> deleteFAQ(@PathVariable Long id) {
+    service.deleteFAQ(id);
+    return ResponseEntity.noContent().build();
+  }
+
+
 }

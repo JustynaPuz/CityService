@@ -3,6 +3,7 @@ package com.smart_city_service_platform.city_directory_service.service;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
 import com.smart_city_service_platform.city_directory_service.repository.FAQRepository;
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,6 @@ public class FAQService {
     this.repository = repository;
   }
 
-  public FAQ save(FAQ faq) {
-    return repository.save(faq);
-  }
 
   public List<FAQ> findAll() {
     return repository.findAll();
@@ -32,5 +30,27 @@ public class FAQService {
 
   public Optional<FAQ> findById(Long id) {
     return repository.findById(id);
+  }
+
+  public FAQ save(FAQ faq) {
+    return repository.save(faq);
+  }
+
+  public FAQ updateFAQ(Long id, FAQ faq) {
+    return repository.findById(id)
+        .map(existingFaq -> {
+          existingFaq.setQuestion(faq.getQuestion());
+          existingFaq.setAnswer(faq.getAnswer());
+          existingFaq.setCategory(faq.getCategory());
+          return repository.save(existingFaq);
+        })
+        .orElseThrow(() -> new EntityNotFoundException("FAQ not found"));
+  }
+
+  public void deleteFAQ(Long id) {
+    if (!repository.existsById(id)) {
+      throw new EntityNotFoundException("FAQ not found");
+    }
+    repository.deleteById(id);
   }
 }
