@@ -10,6 +10,7 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "faq")
@@ -20,9 +21,11 @@ public class FAQ {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Setter
   private String question;
+  @Setter
   private String answer;
   @Enumerated(EnumType.STRING)
+  @Setter
   private FAQCategory category;
 }
-
