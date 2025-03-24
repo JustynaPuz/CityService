@@ -1,5 +1,6 @@
 package com.smart_city_service_platform.city_directory_service.controller;
 
+import com.smart_city_service_platform.city_directory_service.DTO.AmenityRequestDTO;
 import com.smart_city_service_platform.city_directory_service.model.Amenity;
 import com.smart_city_service_platform.city_directory_service.model.AmenityCategory;
 import com.smart_city_service_platform.city_directory_service.service.AmenityService;
@@ -46,7 +47,7 @@ public class AmenityController {
   }
 
   @PostMapping
-  public ResponseEntity<Amenity> createAmenity(@RequestBody Amenity amenity) {
+  public ResponseEntity<Amenity> createAmenity(@RequestBody AmenityRequestDTO amenity) {
     Amenity savedAmenity = service.createAmenity(amenity);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedAmenity);
   }
