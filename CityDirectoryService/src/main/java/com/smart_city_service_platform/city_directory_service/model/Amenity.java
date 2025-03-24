@@ -32,7 +32,7 @@ public class Amenity {
   @Enumerated(EnumType.STRING)
   private AmenityCategory category;
 
-  @ManyToOne
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(name = "location_id")
   private Location location;
 
