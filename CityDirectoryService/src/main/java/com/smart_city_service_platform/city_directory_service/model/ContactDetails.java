@@ -10,18 +10,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "address")
+@Table(name = "contact_details")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Address {
-
+public class ContactDetails {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String city;
-  private String country;
-  private String street;
-  private String houseNumber;
+  private String phoneNumber;
+  private String email;
+
 }
