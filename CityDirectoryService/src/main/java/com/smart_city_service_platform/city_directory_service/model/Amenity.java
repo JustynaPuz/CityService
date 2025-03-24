@@ -40,5 +40,4 @@ public class Amenity {
   @JoinColumn(name = "details_id", referencedColumnName = "id")
   private FacilityDetails details;
 
-
 }
