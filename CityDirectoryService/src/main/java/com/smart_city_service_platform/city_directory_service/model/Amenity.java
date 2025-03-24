@@ -4,6 +4,7 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,8 +36,8 @@ public class Amenity {
   @JoinColumn(name = "location_id")
   private Location location;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "details_id")
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "details_id", referencedColumnName = "id")
   private FacilityDetails details;
 
 
