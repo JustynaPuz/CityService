@@ -1,16 +1,24 @@
-//package com.smart_city_service_platform.city_directory_service.model;
-//
-//import jakarta.persistence.Entity;
-//import jakarta.persistence.Table;
-//
-//@Entity
-////@Table(name = "location")
-//public class Location {
-//  private float latitude;
-//  private float longitude;
-//
-//  public Location(float latitude, float longitude) {
-//    this.latitude = latitude;
-//    this.longitude = longitude;
-//  }
-//}
+package com.smart_city_service_platform.city_directory_service.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@Table(name = "location")
+@Getter
+@Setter
+@NoArgsConstructor
+public class Location {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+  private Double latitude;
+  private Double longitude;
+
+}
