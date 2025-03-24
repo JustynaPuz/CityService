@@ -12,15 +12,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "amenity")
-@Getter
-@Setter
-@NoArgsConstructor
 public class Amenity {
 
   @Id
@@ -40,4 +34,46 @@ public class Amenity {
   @JoinColumn(name = "details_id", referencedColumnName = "id")
   private FacilityDetails details;
 
+  public Amenity() {
+  }
+
+  public Long getId() {
+    return this.id;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public AmenityCategory getCategory() {
+    return this.category;
+  }
+
+  public Location getLocation() {
+    return this.location;
+  }
+
+  public FacilityDetails getDetails() {
+    return this.details;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public void setCategory(AmenityCategory category) {
+    this.category = category;
+  }
+
+  public void setLocation(Location location) {
+    this.location = location;
+  }
+
+  public void setDetails(FacilityDetails details) {
+    this.details = details;
+  }
 }
