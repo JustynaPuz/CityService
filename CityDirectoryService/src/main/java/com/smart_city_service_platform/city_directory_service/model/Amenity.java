@@ -1,5 +1,6 @@
 package com.smart_city_service_platform.city_directory_service.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -34,7 +35,7 @@ public class Amenity {
   @JoinColumn(name = "location_id")
   private Location location;
 
-  @OneToOne
+  @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "details_id")
   private FacilityDetails details;
 
