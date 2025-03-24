@@ -53,7 +53,7 @@ public class AmenityController {
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<Amenity> updateAmenity(@PathVariable Long id, @RequestBody Amenity amenity) {
+  public ResponseEntity<Amenity> updateAmenity(@PathVariable Long id, @RequestBody AmenityRequestDTO amenity) {
     return ResponseEntity.ok(service.updateAmenity(id, amenity));
   }
 
