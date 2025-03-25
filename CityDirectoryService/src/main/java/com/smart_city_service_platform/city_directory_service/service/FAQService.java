@@ -1,56 +1,53 @@
 package com.smart_city_service_platform.city_directory_service.service;
 
+import com.smart_city_service_platform.city_directory_service.DTO.FaqDTO;
+import com.smart_city_service_platform.city_directory_service.mapper.FaqMapper;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
 import com.smart_city_service_platform.city_directory_service.repository.FAQRepository;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class FAQService {
 
-  @Autowired
-  private final FAQRepository repository;
+  private final FAQRepository faqRepository;
+  private final FaqMapper faqMapper;
 
-  public FAQService(FAQRepository repository) {
-    this.repository = repository;
+  public FAQService(FAQRepository faqRepository, FaqMapper faqMapper) {
+    this.faqRepository = faqRepository;
+    this.faqMapper = faqMapper;
   }
 
-
-  public List<FAQ> findAll() {
-    return repository.findAll();
+  public List<FAQ> getAllFAQ() {
+    return faqRepository.findAll();
   }
 
-  public List<FAQ> findByCategory(FAQCategory faqCategory) {
-    return repository.findByCategory(faqCategory);
+  public FAQ getFAQById(Long id) {
+    return faqRepository.findById(id)
+        .orElseThrow(() -> new EntityNotFoundException("FAQ not found with id: " + id));
   }
 
-  public Optional<FAQ> findById(Long id) {
-    return repository.findById(id);
+  public List<FAQ> getFAQByCategory(FAQCategory category) {
+    return faqRepository.findByCategory(category);
   }
 
-  public FAQ save(FAQ faq) {
-    return repository.save(faq);
+  public FAQ createFAQ(FaqDTO dto) {
+    FAQ faq = faqMapper.toEntity(dto);
+    return faqRepository.save(faq);
   }
 
-  public FAQ updateFAQ(Long id, FAQ faq) {
-    return repository.findById(id)
-        .map(existingFaq -> {
-          existingFaq.setQuestion(faq.getQuestion());
-          existingFaq.setAnswer(faq.getAnswer());
-          existingFaq.setCategory(faq.getCategory());
-          return repository.save(existingFaq);
-        })
-        .orElseThrow(() -> new EntityNotFoundException("FAQ not found"));
+  public FAQ updateFAQ(Long id, FaqDTO dto) {
+    FAQ existingFAQ = getFAQById(id);
+    FAQ updatedAmenity = faqMapper.toEntity(dto);
+    updatedAmenity.setId(existingFAQ.getId());
+    return faqRepository.save(updatedAmenity);
   }
 
   public void deleteFAQ(Long id) {
-    if (!repository.existsById(id)) {
-      throw new EntityNotFoundException("FAQ not found");
-    }
-    repository.deleteById(id);
+    faqRepository.deleteById(id);
   }
+
+
 }
