@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FAQRepository extends JpaRepository<FAQ, Long> {
+
   List<FAQ> findByCategory(FAQCategory category);
 
 }
