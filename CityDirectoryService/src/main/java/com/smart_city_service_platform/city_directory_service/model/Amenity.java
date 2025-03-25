@@ -19,10 +19,11 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "amenity")
-@Getter
+
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class Amenity {
 
   @Id
