@@ -1,9 +1,16 @@
 package com.smart_city_service_platform.city_directory_service.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +20,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "government_office")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class GovernmentOffice {
@@ -21,8 +29,16 @@ public class GovernmentOffice {
   private Long id;
 
   private String name;
-  private String address;
-  private String contactInfo;
-  private String services;
-  private String workingHours;
+
+  @Enumerated(EnumType.STRING)
+  private OfficeCategory category;
+
+  @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "location_id")
+  private Location location;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @JoinColumn(name = "details_id", referencedColumnName = "id")
+  private FacilityDetails details;
+
 }
