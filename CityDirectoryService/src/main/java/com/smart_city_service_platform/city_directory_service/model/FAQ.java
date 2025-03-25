@@ -15,17 +15,15 @@ import lombok.Setter;
 @Entity
 @Table(name = "faq")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FAQ {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @Setter
   private String question;
-  @Setter
   private String answer;
   @Enumerated(EnumType.STRING)
-  @Setter
   private FAQCategory category;
 }
