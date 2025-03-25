@@ -34,6 +34,16 @@ public class Amenity {
   @JoinColumn(name = "details_id", referencedColumnName = "id")
   private FacilityDetails details;
 
+
+  public Amenity(Long id, String name, AmenityCategory category, Location location,
+      FacilityDetails details) {
+    this.id = id;
+    this.name = name;
+    this.category = category;
+    this.location = location;
+    this.details = details;
+  }
+
   public Amenity() {
   }
 
