@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS government_office (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     category VARCHAR(50) NOT NULL,
-    location_id INT REFERENCES locations(id) ON DELETE SET NULL,
+    location_id INT REFERENCES location(id) ON DELETE SET NULL,
     details_id INT REFERENCES facility_details(id) ON DELETE CASCADE,
     contact_details_id INT REFERENCES contact_details(id) ON DELETE SET NULL
 );
