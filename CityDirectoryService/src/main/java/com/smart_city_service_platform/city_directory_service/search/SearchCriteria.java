@@ -1,7 +1,5 @@
 package com.smart_city_service_platform.city_directory_service.search;
 
-import com.smart_city_service_platform.city_directory_service.model.AmenityCategory;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
