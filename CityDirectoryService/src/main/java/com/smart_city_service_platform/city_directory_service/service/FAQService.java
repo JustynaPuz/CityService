@@ -31,8 +31,8 @@ public class FAQService {
     return faqRepository.findAll();
   }
 
-  public List<FAQResponse> getFAQCriteria(String search, String sortBy, String sortDir,
-      int page, int size) {
+  public List<FAQResponse> getFAQCriteria(String search, String sortBy, String sortDir, int page,
+      int size) {
     FAQSpecificationBuilder builder = new FAQSpecificationBuilder();
 
     if (search != null && !search.isBlank()) {
@@ -54,9 +54,7 @@ public class FAQService {
     Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
     Pageable pageable = PageRequest.of(page, size, sort);
 
-    return faqRepository.findAll(spec, pageable)
-        .map(faqMapper::toResponse)
-        .toList();
+    return faqRepository.findAll(spec, pageable).map(faqMapper::toResponse).toList();
   }
 
   public FAQ getFAQById(Long id) {

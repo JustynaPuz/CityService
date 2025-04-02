@@ -24,4 +24,5 @@ public class FAQ {
   private String answer;
   @Enumerated(EnumType.STRING)
   private FAQCategory category;
+
 }
