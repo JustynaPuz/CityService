@@ -5,6 +5,7 @@ import com.smart_city_service_platform.city_directory_service.DTO.FaqRequestDTO;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
 import com.smart_city_service_platform.city_directory_service.service.FAQService;
+import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,13 +62,13 @@ public class FAQController {
   }
 
   @PostMapping
-  public ResponseEntity<FAQ> createFAQ(@RequestBody FaqRequestDTO faq) {
+  public ResponseEntity<FAQ> createFAQ(@Valid @RequestBody FaqRequestDTO faq) {
     FAQ savedFAQ = service.createFAQ(faq);
     return ResponseEntity.status(HttpStatus.CREATED).body(savedFAQ);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<FAQ> updateFAQ(@PathVariable Long id, @RequestBody FaqRequestDTO faq) {
+  public ResponseEntity<FAQ> updateFAQ(@PathVariable Long id, @Valid @RequestBody FaqRequestDTO faq) {
     return ResponseEntity.ok(service.updateFAQ(id, faq));
   }
 
