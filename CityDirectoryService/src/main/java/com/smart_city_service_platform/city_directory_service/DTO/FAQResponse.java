@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class FAQResponse {
+
   private Long id;
   private String question;
   private String answer;
