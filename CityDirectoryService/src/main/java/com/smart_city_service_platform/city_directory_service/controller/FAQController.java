@@ -5,6 +5,7 @@ import com.smart_city_service_platform.city_directory_service.DTO.FaqRequestDTO;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
 import com.smart_city_service_platform.city_directory_service.service.FAQService;
+import com.smart_city_service_platform.city_directory_service.validation.SearchRequestValidator;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -47,8 +48,8 @@ public class FAQController {
       @RequestParam(defaultValue = "" + DEFAULT_PAGE) int page,
       @RequestParam(defaultValue = "" + DEFAULT_SIZE) int size
   ) {
-    validateSortDirection(sortDirection);
-    validatePageAndSize(page, size);
+    SearchRequestValidator.validateSortDirection(sortDirection);
+    SearchRequestValidator.validatePageAndSize(page, size);
 
     List<FAQResponse> result = service.getFAQCriteria(search, sortBy, sortDirection, page, size);
     return ResponseEntity.ok(result);
@@ -80,22 +81,6 @@ public class FAQController {
   public ResponseEntity<Void> deleteFAQ(@PathVariable Long id) {
     service.deleteFAQ(id);
     return ResponseEntity.noContent().build();
-  }
-
-
-  private void validateSortDirection(String direction) {
-    if (!direction.equalsIgnoreCase("asc") && !direction.equalsIgnoreCase("desc")) {
-      throw new IllegalArgumentException("Sort direction must be 'asc' or 'desc'");
-    }
-  }
-
-  private void validatePageAndSize(int page, int size) {
-    if (page < 0) {
-      throw new IllegalArgumentException("Page index must not be negative");
-    }
-    if (size <= 0 || size > 100) {
-      throw new IllegalArgumentException("Page size must be between 1 and 100");
-    }
   }
 
 }
