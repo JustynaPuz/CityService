@@ -20,7 +20,7 @@ public class FAQSpecificationBuilder {
     if (params.isEmpty()) {
       return null;
     }
-    Specification<FAQ> result = new FAQSpecification(params.get(0));
+    Specification<FAQ> result = new FAQSpecification(params.getFirst());
 
     for (int i = 1; i < params.size(); i++) {
       result = result.and(new FAQSpecification(params.get(i)));
