@@ -10,8 +10,6 @@ public interface FaqMapper {
 
   FAQ toEntity(FaqRequestDTO dto);
 
-  FaqRequestDTO toDTO(FAQ entity);
-
   FAQResponse toResponse(FAQ entity);
 
 }

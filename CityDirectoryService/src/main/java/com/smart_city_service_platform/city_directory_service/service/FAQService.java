@@ -10,6 +10,7 @@ import com.smart_city_service_platform.city_directory_service.search.SearchOpera
 import com.smart_city_service_platform.city_directory_service.specification.FAQSpecificationBuilder;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Objects;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -38,23 +39,32 @@ public class FAQService {
     if (search != null && !search.isBlank()) {
       String[] operations = search.split(";");
       for (String operation : operations) {
+        boolean matched = false;
         for (String symbol : SearchOperation.SIMPLE_OPERATION_SET) {
           int idx = operation.indexOf(symbol);
           if (idx != -1) {
             String key = operation.substring(0, idx);
             String value = operation.substring(idx + symbol.length());
             SearchOperation op = SearchOperation.getSimpleOperation(symbol.charAt(0));
-            builder.with(key.trim(), op, value.trim());
+            if (Objects.isNull(op)) {
+              throw new IllegalArgumentException("Invalid search operation in: " + operation);
+            }
+            builder.with(key, op, value);
             break;
           }
         }
+        if (!matched) {
+          throw new IllegalArgumentException("Invalid search expression: " + operation);
+        }
       }
     }
+
     Specification<FAQ> spec = builder.build();
     Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
     Pageable pageable = PageRequest.of(page, size, sort);
 
     return faqRepository.findAll(spec, pageable).map(faqMapper::toResponse).toList();
+
   }
 
   public FAQ getFAQById(Long id) {
@@ -79,6 +89,10 @@ public class FAQService {
   }
 
   public void deleteFAQ(Long id) {
+    if (!faqRepository.existsById(id)) {
+      throw new EntityNotFoundException("Cannot delete FAQ – ID " + id + " not found");
+    }
     faqRepository.deleteById(id);
   }
+
 }
