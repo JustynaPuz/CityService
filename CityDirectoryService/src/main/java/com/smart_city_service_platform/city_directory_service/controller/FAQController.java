@@ -1,5 +1,6 @@
 package com.smart_city_service_platform.city_directory_service.controller;
 
+import com.smart_city_service_platform.city_directory_service.DTO.FAQResponse;
 import com.smart_city_service_platform.city_directory_service.DTO.FaqRequestDTO;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
@@ -7,7 +8,6 @@ import com.smart_city_service_platform.city_directory_service.service.FAQService
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,10 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/faqs")
+@RestController
+@RequestMapping("/api/faqs")
 public class FAQController {
+
+  private static final String DEFAULT_SORT_BY = "id";
+  private static final String DEFAULT_SORT_DIRECTION = "asc";
+  private static final int DEFAULT_PAGE = 0;
+  private static final int DEFAULT_SIZE = 10;
 
   private final FAQService service;
 
@@ -29,6 +36,18 @@ public class FAQController {
   @GetMapping
   public ResponseEntity<List<FAQ>> getAllFAQ() {
     return ResponseEntity.ok(service.getAllFAQ());
+  }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<FAQResponse>> searchAmenities(
+      @RequestParam(required = false) String search,
+      @RequestParam(defaultValue = DEFAULT_SORT_BY) String sortBy,
+      @RequestParam(defaultValue = DEFAULT_SORT_DIRECTION) String sortDirection,
+      @RequestParam(defaultValue = "" + DEFAULT_PAGE) int page,
+      @RequestParam(defaultValue = "" + DEFAULT_SIZE) int size
+  ) {
+    List<FAQResponse> result = service.getFAQCriteria(search, sortBy, sortDirection, page, size);
+    return ResponseEntity.ok(result);
   }
 
   @GetMapping("/{id}")
@@ -57,6 +76,5 @@ public class FAQController {
     service.deleteFAQ(id);
     return ResponseEntity.noContent().build();
   }
-
 
 }
