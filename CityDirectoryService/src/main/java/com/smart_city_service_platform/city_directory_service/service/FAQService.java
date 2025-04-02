@@ -1,6 +1,6 @@
 package com.smart_city_service_platform.city_directory_service.service;
 
-import com.smart_city_service_platform.city_directory_service.DTO.FaqDTO;
+import com.smart_city_service_platform.city_directory_service.DTO.FaqRequestDTO;
 import com.smart_city_service_platform.city_directory_service.mapper.FaqMapper;
 import com.smart_city_service_platform.city_directory_service.model.FAQ;
 import com.smart_city_service_platform.city_directory_service.model.FAQCategory;
@@ -33,12 +33,12 @@ public class FAQService {
     return faqRepository.findByCategory(category);
   }
 
-  public FAQ createFAQ(FaqDTO dto) {
+  public FAQ createFAQ(FaqRequestDTO dto) {
     FAQ faq = faqMapper.toEntity(dto);
     return faqRepository.save(faq);
   }
 
-  public FAQ updateFAQ(Long id, FaqDTO dto) {
+  public FAQ updateFAQ(Long id, FaqRequestDTO dto) {
     FAQ existingFAQ = getFAQById(id);
     FAQ updatedAmenity = faqMapper.toEntity(dto);
     updatedAmenity.setId(existingFAQ.getId());
