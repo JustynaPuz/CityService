@@ -2,12 +2,10 @@ package com.smart_city_service_platform.city_directory_service.DTO;
 
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class WorkingHoursResponse {
