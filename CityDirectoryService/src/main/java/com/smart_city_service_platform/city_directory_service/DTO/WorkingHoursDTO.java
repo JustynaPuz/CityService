@@ -1,6 +1,7 @@
 package com.smart_city_service_platform.city_directory_service.DTO;
 
-import jakarta.validation.constraints.NotBlank;
+import com.smart_city_service_platform.city_directory_service.validation.ValidTimeRange;
+import jakarta.validation.constraints.NotNull;
 import java.time.LocalTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +10,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@ValidTimeRange
 public class WorkingHoursDTO {
 
-  @NotBlank
+  @NotNull(message = "Start time must not be null")
   private LocalTime fromTime;
-  @NotBlank
+
+  @NotNull(message = "End time must not be null")
   private LocalTime toTime;
 
 }
