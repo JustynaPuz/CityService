@@ -18,4 +18,5 @@ public class FacilityDetailsDTO {
   @NotNull(message = "Address must not be null")
   @Valid
   private AddressDTO address;
+
 }
