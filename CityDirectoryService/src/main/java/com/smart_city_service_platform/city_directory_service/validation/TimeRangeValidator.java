@@ -10,7 +10,7 @@ public class TimeRangeValidator implements ConstraintValidator<ValidTimeRange, W
   @Override
   public boolean isValid(WorkingHoursDTO dto, ConstraintValidatorContext context) {
     if (Objects.isNull(dto.getFromTime()) || Objects.isNull(dto.getToTime())) {
-      return true; //NotNull annotations
+      return true; //NotNull annotation
     }
     return dto.getFromTime().isBefore(dto.getToTime());
   }
