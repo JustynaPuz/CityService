@@ -3,6 +3,11 @@ package com.smart_city_service_platform.city_directory_service.validation;
 import org.springframework.data.domain.Sort;
 
 public class SearchRequestValidator {
+
+  private static final int MIN_PAGE_INDEX = 0;
+  private static final int MIN_PAGE_SIZE = 1;
+  private static final int MAX_PAGE_SIZE = 100;
+
   public static void validateSortDirection(String direction) {
     try {
       Sort.Direction.fromString(direction);
@@ -12,12 +17,11 @@ public class SearchRequestValidator {
   }
 
   public static void validatePageAndSize(int page, int size) {
-    if (page < 0) {
+    if (page < MIN_PAGE_INDEX) {
       throw new IllegalArgumentException("Page index must not be negative");
     }
-    if (size <= 0 || size > 100) {
-      throw new IllegalArgumentException("Page size must be between 1 and 100");
+    if (size < MIN_PAGE_SIZE || size > MAX_PAGE_SIZE) {
+      throw new IllegalArgumentException("Page size must be between " + MIN_PAGE_SIZE + " and " + MAX_PAGE_SIZE);
     }
   }
-
 }
