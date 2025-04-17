@@ -1,16 +1,18 @@
 version: '3.8'
-
 services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+    ports:
+      - "8761:8761"
+    container_name: eureka-server
+
   postgres:
     image: postgres:17.2
     container_name: city_service_platform_postgres_db
     restart: always
     env_file:
-      - .env
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - CityDirectoryService/.env
     ports:
       - "5432:5432"
     volumes:
@@ -18,19 +20,21 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
   
   city-service:
-    build: .
+    build: CityDirectoryService
     container_name: city_directory_service
     restart: always
     depends_on:
       - postgres
+      - eureka-server
     env_file:
-      - .env
+      - CityDirectoryService/.env
     ports:
       - "8080:8080"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/$POSTGRES_DB
       SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
       SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
 
 volumes:
   postgres_data:
