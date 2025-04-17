@@ -1,4 +1,4 @@
-package com.smart_city_service_platform.city_directory_service;
+package com.smartcity.serviceplatform.citydirectoryservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
