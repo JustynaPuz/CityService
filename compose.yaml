@@ -36,6 +36,17 @@ services:
       SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
 
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+    environment:
+      SERVER_PORT: 8088
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+
 volumes:
   postgres_data:
 
