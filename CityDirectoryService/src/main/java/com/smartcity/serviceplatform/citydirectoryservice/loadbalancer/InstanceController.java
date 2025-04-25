@@ -11,4 +11,5 @@ public class InstanceController {
   public String getInstanceId() {
     return "I'm running on: " + System.getenv("INSTANCE_NAME");
   }
+
 }
