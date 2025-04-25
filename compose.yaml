@@ -1,0 +1,63 @@
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+    ports:
+      - "8761:8761"
+    container_name: eureka-server
+
+  postgres:
+    image: postgres:17.2
+    container_name: city_service_platform_postgres_db
+    restart: always
+    env_file:
+      - CityDirectoryService/.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+  
+  city-directory-service:
+    build: CityDirectoryService
+    container_name: city-directory-service
+    restart: always
+    depends_on:
+      - postgres
+      - eureka-server
+      - zipkin
+    env_file:
+      - CityDirectoryService/.env
+    ports:
+      - "8080:8080"
+    environment:
+      INSTANCE_NAME: city_directory_service_1
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/$POSTGRES_DB
+      SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
+      SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  gateway-service:
+    build: ./gateway-service
+    container_name: gateway-service
+    ports:
+      - "8088:8088"
+    depends_on:
+      - eureka-server
+      - city-directory-service
+      - zipkin
+    environment:
+      SERVER_PORT: 8088
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+      MANAGEMENT_ZIPKIN_TRACING_ENDPOINT: http://zipkin:9411/api/v2/spans
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+volumes:
+  postgres_data:
+
