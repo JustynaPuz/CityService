@@ -5,6 +5,9 @@ services:
     ports:
       - "8761:8761"
     container_name: eureka-server
+    networks:
+      - city-platform-network
+
 
   postgres:
     image: postgres:17.2
@@ -17,10 +20,14 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-  
+    networks:
+      - city-platform-network
+
+
+
   city-service-1:
     build: CityDirectoryService
-    container_name: city_directory_service_1
+    container_name: city-directory-service-1
     restart: always
     depends_on:
       - postgres
@@ -30,29 +37,33 @@ services:
     ports:
       - "8080:8080"
     environment:
-      INSTANCE_NAME: city_directory_service_1
+      INSTANCE_NAME: city-directory-service-1
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/$POSTGRES_DB
       SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
       SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - city-platform-network
 
-  city-service-2:
-    build: CityDirectoryService
-    container_name: city_directory_service_2
-    restart: always
-    depends_on:
-      - postgres
-      - eureka-server
-    env_file:
-      - CityDirectoryService/.env
-    ports:
-      - "8081:8080"
-    environment:
-      INSTANCE_NAME: city_directory_service_2
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/$POSTGRES_DB
-      SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
-      SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+#  city-service-2:
+#    build: CityDirectoryService
+#    container_name: city_directory_service_2
+#    restart: always
+#    depends_on:
+#      - postgres
+#      - eureka-server
+#    env_file:
+#      - CityDirectoryService/.env
+#    ports:
+#      - "8081:8080"
+#    environment:
+#      INSTANCE_NAME: city_directory_service_2
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/$POSTGRES_DB
+#      SPRING_DATASOURCE_USERNAME: $POSTGRES_USER
+#      SPRING_DATASOURCE_PASSWORD: $POSTGRES_PASSWORD
+#      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+#    networks:
+#      - city-platform-network
 
   gateway-service:
     build: ./gateway-service
@@ -64,7 +75,37 @@ services:
     environment:
       SERVER_PORT: 8088
       EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://eureka-server:8761/eureka
+    networks:
+      - city-platform-network
+
+  prometheus:
+    image: prom/prometheus:v2.52.0
+    container_name: prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./data/prometheus/config:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yaml"
+    networks:
+      - city-platform-network
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - city-platform-network
+
 
 volumes:
   postgres_data:
+
+networks:
+  city-platform-network:
+    driver: bridge
 
